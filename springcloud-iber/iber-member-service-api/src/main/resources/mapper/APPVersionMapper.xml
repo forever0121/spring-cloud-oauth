@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iber.mapper.version.APPVersionMapper">
+	<resultMap id="queryAPPVersionResultMap"
+		type="com.iber.vo.version.QueryAPPVersionVO">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="app_desc" property="appDesc" jdbcType="VARCHAR" />
+		<result column="app_name" property="appName" jdbcType="VARCHAR" />
+		<result column="current_record" property="currentRecord"
+			jdbcType="INTEGER" />
+		<result column="version_no" property="versionNo" jdbcType="VARCHAR" />
+		<result column="publish_date" property="publishDate" jdbcType="VARCHAR" />
+		<result column="download_url" property="downloadUrl" jdbcType="VARCHAR" />
+		<result column="is_force_update" property="isForceUpdate"
+			jdbcType="VARCHAR" />
+		<result column="app_category" property="appCategory" jdbcType="VARCHAR" />
+		<result column="app_size" property="appSize" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="queryAPPVersion" resultMap="queryAPPVersionResultMap"
+		parameterType="java.util.Map">
+		select id, app_desc, app_name,app_size,
+		version_no,current_record,DATE_FORMAT(publish_date,'%Y-%m-%d %H:%i:%s') as publish_date,download_url,
+		iFnull(
+		( select
+		CASE is_force_update
+		WHEN 'T' THEN
+		'true'
+		ELSE
+		'false'
+		END
+		from
+		x_app_version
+		<trim prefixOverrides="and">
+			<where>
+				app_category = #{appCategory,jdbcType=VARCHAR}
+				AND app_type = #{appType}
+			</where>
+		</trim>
+		and is_force_update = 'T'
+		and current_record &gt;= (SELECT current_record FROM x_app_version
+			WHERE app_category = #{appCategory} AND app_type = #{appType} AND current_record &gt;= #{currentRecord} )
+		and current_record &lt;= (
+		select
+		max(current_record)
+		from
+		x_app_version
+		<trim prefixOverrides="and">
+			<where>
+				app_category = #{appCategory,jdbcType=VARCHAR} 
+				AND app_type = #{appType}
+			</where>
+		</trim>
+		) LIMIT 0,1),'false') AS is_force_update,app_category
+		FROM
+		x_app_version
+		<trim prefixOverrides="and">
+			<where>
+				app_category = #{appCategory,jdbcType=VARCHAR}
+				AND app_type = #{appType}
+			</where>
+		</trim>
+		and current_record = (
+		select
+		max(current_record)
+		from
+		x_app_version
+		<trim prefixOverrides="and">
+			<where>
+				app_category = #{appCategory,jdbcType=VARCHAR}
+				AND app_type = #{appType}
+			</where>
+		</trim>
+		)
+	</select>
+</mapper>

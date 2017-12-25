@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  application:
+      name:  iber-member-service-api
+  datasource:
+      url: jdbc:mysql://xzyd0769w.mysql.rds.aliyuncs.com:3306/yb_test?characterEncoding=UTF-8
+      username: iber_test
+      password: 5!$RPxeLWd1WQA%8
+      driver-class-name: com.mysql.jdbc.Driver
+
+server:
+  port: 8765
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/eureka/

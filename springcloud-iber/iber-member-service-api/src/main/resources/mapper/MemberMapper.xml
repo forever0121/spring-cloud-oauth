@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.iber.mapper.member.MemberMapper" >
+  <resultMap id="BaseResultMap" type="com.iber.model.member.Member" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="driver_idcard" property="driverIdcard" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="head_photo_url" property="headPhotoUrl" jdbcType="VARCHAR" />
+    <result column="driver_idcard_photo_url" property="driverIdcardPhotoUrl" jdbcType="VARCHAR" />
+    <result column="idcard_photo_url" property="idcardPhotoUrl" jdbcType="VARCHAR" />
+    <result column="finger_print" property="fingerPrint" jdbcType="VARCHAR" />
+    <result column="register_ip" property="registerIp" jdbcType="VARCHAR" />
+    <result column="register_category" property="registerCategory" jdbcType="VARCHAR" />
+    <result column="accout_status" property="accoutStatus" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="enterprise_id" property="enterpriseId" jdbcType="INTEGER" />
+    <result column="member_level" property="memberLevel" jdbcType="VARCHAR" />
+    <result column="enterprise_check_status" property="enterpriseCheckStatus" jdbcType="VARCHAR" />
+    <result column="is_drive" property="isDrive" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+     <result column="token" property="token" jdbcType="VARCHAR" />
+     <result column="query_msg_time" property="queryMsgTime" jdbcType="TIMESTAMP" />
+     <result column="driver_idcard_validity_time" property="driverIdcardValidityTime" jdbcType="TIMESTAMP" />
+     <result column="driver_idcard_update" property="driverIdcardUpdate" jdbcType="INTEGER" />
+     <result column="latest_contributed_val" property="latestContributedVal" />
+    <result column="level_code" property="levelCode" jdbcType="INTEGER" />
+    <result column="driver_idCard_time" property="driverIdCardTime" jdbcType="TIMESTAMP" />
+    <result column="isUseBirthDayCoupon" property="isUseBirthDayCoupon"/>
+    <result column="latest_use_car_time" property="lastUseCarTime"/>
+      
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, sex, password, phone, email, idcard, driver_idcard, status, head_photo_url, 
+    driver_idcard_photo_url, idcard_photo_url, finger_print, register_ip, register_category, 
+    accout_status, city_code, enterprise_id, member_level, enterprise_check_status, is_drive,create_time, remark,token,query_msg_time,
+    driver_idcard_validity_time,driver_idcard_update, latest_contributed_val, level_code,driver_idCard_time,isUseBirthDayCoupon,latest_use_car_time
+  </sql>
+  
+  <update id="updateMemberToken"  parameterType="java.util.Map">
+    update x_member set token = #{token,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateEmployeeToken"  parameterType="java.util.Map">
+    update e_employee_info set token = #{token,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <update id="updateMemberQueryMsgTime"  parameterType="java.util.Map">
+    update x_member set query_msg_time = #{queryMsgTime,jdbcType=TIMESTAMP} where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from x_member
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectEmployeeByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    id,name,idcard,photo_url,status,type,phone,password,token
+    from e_employee_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from x_member
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.iber.model.member.Member" useGeneratedKeys="true" keyProperty="id">
+    insert into x_member (id, name, sex, 
+      password, phone, email, 
+      idcard, driver_idcard, status, 
+      head_photo_url, driver_idcard_photo_url, idcard_photo_url, 
+      finger_print, register_ip, register_category, 
+      accout_status, city_code, enterprise_id, 
+      member_level, enterprise_check_status, is_drive , create_time ,remark,latest_use_car_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{idcard,jdbcType=VARCHAR}, #{driverIdcard,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{headPhotoUrl,jdbcType=VARCHAR}, #{driverIdcardPhotoUrl,jdbcType=VARCHAR}, #{idcardPhotoUrl,jdbcType=VARCHAR}, 
+      #{fingerPrint,jdbcType=VARCHAR}, #{registerIp,jdbcType=VARCHAR}, #{registerCategory,jdbcType=VARCHAR}, 
+      #{accoutStatus,jdbcType=VARCHAR}, #{cityCode,jdbcType=VARCHAR}, #{enterpriseId,jdbcType=INTEGER}, 
+      #{memberLevel,jdbcType=VARCHAR}, #{enterpriseCheckStatus,jdbcType=VARCHAR}, #{isDrive,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},#{remark,jdbcType=VARCHAR},#{lastUseCarTime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.iber.model.member.Member" useGeneratedKeys="true" keyProperty="id">
+    insert into x_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="driverIdcard != null" >
+        driver_idcard,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="headPhotoUrl != null" >
+        head_photo_url,
+      </if>
+      <if test="driverIdcardPhotoUrl != null" >
+        driver_idcard_photo_url,
+      </if>
+      <if test="idcardPhotoUrl != null" >
+        idcard_photo_url,
+      </if>
+      <if test="fingerPrint != null" >
+        finger_print,
+      </if>
+      <if test="registerIp != null" >
+        register_ip,
+      </if>
+      <if test="registerCategory != null" >
+        register_category,
+      </if>
+      <if test="accoutStatus != null" >
+        accout_status,
+      </if>
+      <if test="cityCode != null" >
+        city_code,
+      </if>
+      <if test="enterpriseId != null" >
+        enterprise_id,
+      </if>
+      <if test="memberLevel != null" >
+        member_level,
+      </if>
+      <if test="enterpriseCheckStatus != null" >
+        enterprise_check_status,
+      </if>
+      <if test="isDrive != null" >
+        is_drive,
+      </if>
+      <if test="createTime != null">
+      create_time,
+      </if>
+      <if test="remark != null">
+      remark,
+      </if>
+      <if test="lastUseCarTime != null">
+      	latest_use_car_time
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdcard != null" >
+        #{driverIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhotoUrl != null" >
+        #{headPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdcardPhotoUrl != null" >
+        #{driverIdcardPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPhotoUrl != null" >
+        #{idcardPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerPrint != null" >
+        #{fingerPrint,jdbcType=VARCHAR},
+      </if>
+      <if test="registerIp != null" >
+        #{registerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCategory != null" >
+        #{registerCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="accoutStatus != null" >
+        #{accoutStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null" >
+        #{enterpriseId,jdbcType=INTEGER},
+      </if>
+      <if test="memberLevel != null" >
+        #{memberLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseCheckStatus != null" >
+        #{enterpriseCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="isDrive != null" >
+        #{isDrive,jdbcType=VARCHAR},
+      </if>
+       <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUseCarTime != null">
+      	#{lastUseCarTime}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.iber.model.member.Member" >
+    update x_member
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdcard != null" >
+        driver_idcard = #{driverIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="headPhotoUrl != null" >
+        head_photo_url = #{headPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="driverIdcardPhotoUrl != null" >
+        driver_idcard_photo_url = #{driverIdcardPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardPhotoUrl != null" >
+        idcard_photo_url = #{idcardPhotoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fingerPrint != null" >
+        finger_print = #{fingerPrint,jdbcType=VARCHAR},
+      </if>
+      <if test="registerIp != null" >
+        register_ip = #{registerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="registerCategory != null" >
+        register_category = #{registerCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="accoutStatus != null" >
+        accout_status = #{accoutStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cityCode != null" >
+        city_code = #{cityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseId != null" >
+        enterprise_id = #{enterpriseId,jdbcType=INTEGER},
+      </if>
+      <if test="memberLevel != null" >
+        member_level = #{memberLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseCheckStatus != null" >
+        enterprise_check_status = #{enterpriseCheckStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="isDrive != null" >
+        is_drive = #{isDrive,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUseCarTime != null">
+      	latest_use_car_time = #{lastUseCarTime}
+      </if>
+<!--        <if test="remark != null" >  -->
+<!--          remark = #{remark,jdbcType=VARCHAR},  -->
+<!--        </if>  -->
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iber.model.member.Member" >
+    update x_member
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      driver_idcard = #{driverIdcard,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      head_photo_url = #{headPhotoUrl,jdbcType=VARCHAR},
+      driver_idcard_photo_url = #{driverIdcardPhotoUrl,jdbcType=VARCHAR},
+      idcard_photo_url = #{idcardPhotoUrl,jdbcType=VARCHAR},
+      finger_print = #{fingerPrint,jdbcType=VARCHAR},
+      register_ip = #{registerIp,jdbcType=VARCHAR},
+      register_category = #{registerCategory,jdbcType=VARCHAR},
+      accout_status = #{accoutStatus,jdbcType=VARCHAR},
+      city_code = #{cityCode,jdbcType=VARCHAR},
+      enterprise_id = #{enterpriseId,jdbcType=INTEGER},
+      member_level = #{memberLevel,jdbcType=VARCHAR},
+      enterprise_check_status = #{enterpriseCheckStatus,jdbcType=VARCHAR},
+      is_drive = #{isDrive,jdbcType=VARCHAR},
+      latest_contributed_val = #{latestContributedVal},
+      isUseBirthDayCoupon = #{isUseBirthDayCoupon},
+<!--         remark = #{remark,jdbcType=VARCHAR}, -->
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      latest_use_car_time = #{lastUseCarTime}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectRecordByPasswordAndPhone" parameterType="java.util.Map" resultType="java.lang.Integer">
+     select count(1) from x_member where password = #{password,jdbcType=VARCHAR} and phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectRecordByPhone" parameterType="java.lang.String" resultType="java.lang.Integer" >
+    select count(1) from x_member where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectDetailByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+      <include refid="Base_Column_List" />
+     from x_member where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="queryEnterpriseAccount" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+      <include refid="Base_Column_List" />
+     from x_member where enterprise_id = #{enterpriseId,jdbcType=INTEGER} and member_level = 'account'
+  </select>
+  
+  <select id="getEnterpriseMember" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from x_member
+     where   enterprise_id = #{enterpriseId,jdbcType=INTEGER} and enterprise_check_status = #{enterpriseCheckStatus,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getPageEnterpriseMember" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from x_member
+     where   enterprise_id = #{enterpriseId,jdbcType=INTEGER} and enterprise_check_status = #{enterpriseCheckStatus,jdbcType=VARCHAR}
+     order by create_time desc limit #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
+  </select>
+  
+  <update id="checkEnterpriseMember" parameterType="java.util.Map" >
+    update x_member
+    set  enterprise_check_status = #{enterpriseCheckStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateEnterpriseMemberRank" parameterType="java.util.Map" >
+    update x_member
+    set  member_level = #{memberLevel,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateMemberAccountStatus" parameterType="com.iber.model.member.Member" >
+    update x_member
+    set  accout_status = #{accoutStatus,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="selectMemberByIdCard" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+      <include refid="Base_Column_List" />
+     from x_member where idcard = #{idCard,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <update id="updatePassword" parameterType="com.iber.model.member.Member">
+     update x_member 
+     set password = #{password,jdbcType=VARCHAR} 
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateDoneInfo" parameterType="com.iber.model.member.Member">
+      update x_member 
+      set sex = #{sex,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      driver_idcard = #{driverIdcard,jdbcType=VARCHAR},
+      driver_idcard_photo_url = #{driverIdcardPhotoUrl,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      remark = NULL
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updatePhoneByMemberId" parameterType="java.util.Map">
+     update x_member 
+     set password = #{password,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <update id="updateMemberHeadPhoto"  parameterType="java.util.Map" >
+     update x_member 
+     set head_photo_url = #{headPhotoUrl,jdbcType=VARCHAR}
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <update id="updateDonePhotos" parameterType="com.iber.model.member.Member">
+      update x_member set
+      driver_idcard_photo_url = #{driverIdcardPhotoUrl,jdbcType=VARCHAR},
+      idcard_photo_url = #{idcardPhotoUrl,jdbcType=VARCHAR},
+      name = #{name},
+      idcard = #{idcard},
+      driver_idcard = #{driverIdcard},
+      driver_idcard_validity_time = #{driverIdcardValidityTime},
+      driver_idCard_time = #{driverIdCardTime},
+      status = 'experience' ,
+      upload_time = now(),
+      sex = #{sex},
+      remark = NULL
+     where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据充电枪的connectorNo查当前充电订单的对应会员的手机号码  -->
+  <select id="getPhoneByLatestOrdAndConnectNo" parameterType="java.util.Map" resultType="java.lang.String">
+  	SELECT m.phone FROM x_member m 
+  		INNER JOIN `c_charging_order` o ON m.id = o.member_id 
+  		<if test="chargingStatus != null and chargingStatus != '' ">
+  			AND o.charging_status = #{chargingStatus}
+  		</if>
+  			AND o.userType IS NULL
+		INNER JOIN c_equipment_info e ON e.id = o.equipment_id 
+		<if test="equipmentCode != null and equipmentCode != '' ">
+			AND e.equipment_code = #{equipmentCode}
+		</if>
+		INNER JOIN c_connector_info c ON c.id = o.connector_id 
+			AND c.equipment_id = o.equipment_id AND c.connector_no = #{connectorNo}
+		ORDER BY o.create_time DESC LIMIT 1
+  </select>
+  
+  <select id="getRecordsByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select <include refid="Base_Column_List"/> from x_member
+     where phone = #{phone,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 更新会员的等级 -->
+	<update id="updateMemberLevelCode" parameterType="java.lang.Integer">
+		UPDATE x_member 
+			SET level_code = #{levelCode}
+			WHERE id = #{memberId}
+	</update>
+  
+  <update id="updateMemberAccountStatusByMemberId">
+		update x_member set accout_status =
+		#{accoutStatus,jdbcType=VARCHAR} where
+		id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
